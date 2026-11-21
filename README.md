@@ -2,9 +2,16 @@
 
 ディーゼル車向けフィルターレスPM回収システムの挙動を可視化する、ブラウザ完結型の2D簡略物理シミュレーターです。
 
-## 起動
+## GitHub Pagesで公開する方法（ブランチからデプロイ）
 
-GitHub Pagesで公開する場合は、リポジトリの **Settings → Pages → Build and deployment → Source** を **GitHub Actions** に設定してください。`main` への push 後、`.github/workflows/pages.yml` が自動デプロイします。
+1. リポジトリの **Settings → Pages** を開きます。
+2. **Build and deployment** の **Source** を **Deploy from a branch** にします。
+3. **Branch** を **main**、フォルダーを **/(root)** に設定して **Save** を押します。
+4. 数分待って、次のURLを開きます。
+
+   https://buturimahura-sys.github.io/simulation0001_buturi/
+
+公開元のファイル `index.html` はリポジトリのルートにあります。
 
 ## 機能
 
