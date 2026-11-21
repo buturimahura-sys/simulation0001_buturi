@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>PM Capture Lab | フィルターレス排気システムシミュレーター</title>
+<style>
+:root{color-scheme:dark;--bg:#07111f;--panel:#101e30;--panel2:#14263b;--line:#263b53;--text:#e7f0fa;--muted:#8da4bb;--cyan:#43d9e8;--blue:#4c9fff;--orange:#ffb45b;--green:#59d6a0;--red:#ff6e78}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#122943 0,transparent 42%),var(--bg);color:var(--text);font:14px/1.5 Inter,"Noto Sans JP",system-ui,sans-serif}
+header{padding:20px 26px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;gap:12px;align-items:center}.mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#38d8e7,#2875d8);display:grid;place-items:center;color:#06111e;font-weight:900;font-size:20px}.eyebrow{font-size:10px;letter-spacing:.16em;color:var(--cyan);font-weight:800}.brand h1{font-size:18px;margin:1px 0}.sub{color:var(--muted);font-size:11px}
+.header-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.status{color:var(--green);font-size:11px;display:flex;gap:6px;align-items:center}.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green)}
+button{cursor:pointer;border:1px solid var(--line);background:#172a40;color:var(--text);border-radius:8px;padding:8px 11px;font:inherit;font-size:12px;transition:.18s}button:hover{border-color:var(--cyan);background:#1d3853}button.primary{background:var(--cyan);border-color:var(--cyan);color:#06131d;font-weight:800}button.active{border-color:var(--cyan);color:var(--cyan);background:#143346}
+main{padding:18px 22px 34px;max-width:1600px;margin:auto}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}.metric,.panel{background:linear-gradient(145deg,rgba(19,37,57,.96),rgba(12,27,44,.96));border:1px solid var(--line);border-radius:13px}.metric{padding:13px 15px;min-height:94px}.metric-label{color:var(--muted);font-size:11px;display:flex;justify-content:space-between}.metric-value{font-size:27px;font-weight:800;letter-spacing:-.04em;margin-top:4px;font-variant-numeric:tabular-nums}.metric-unit{font-size:12px;color:var(--muted);font-weight:500;margin-left:4px}.metric-foot{font-size:10px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(330px,.9fr);gap:14px;align-items:start}.panel{padding:15px;margin-bottom:14px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.panel-head h2{font-size:13px;margin:0;letter-spacing:.03em}.tag{font-size:10px;padding:3px 7px;border-radius:20px;background:#17384a;color:var(--cyan);border:1px solid #24566a}.canvas-wrap{position:relative;background:#081522;border:1px solid #263c52;border-radius:10px;overflow:hidden}.canvas-wrap canvas{display:block;width:100%;height:auto;aspect-ratio:900/380}.canvas-legend{display:flex;gap:15px;flex-wrap:wrap;padding:10px 3px 0;color:var(--muted);font-size:10px}.key{display:flex;align-items:center;gap:5px}.swatch{width:8px;height:8px;border-radius:50%;display:inline-block}.hint{color:var(--muted);font-size:10px;margin-top:9px}.left-bottom{display:grid;grid-template-columns:1fr 1fr;gap:14px}.chartbox{height:150px;position:relative}.chartbox canvas{width:100%;height:100%}
+.presets{display:flex;gap:7px;flex-wrap:wrap}.presets button{font-size:11px}.module{padding:11px 0;border-top:1px solid var(--line)}.module:first-of-type{border-top:0}.module-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.module-name{font-size:12px;font-weight:700}.module-desc{font-size:10px;color:var(--muted);margin:2px 0 8px}.toggle{width:36px;height:20px;border-radius:20px;padding:2px;background:#33475b;border:0;position:relative;flex:none}.toggle:after{content:"";display:block;width:16px;height:16px;border-radius:50%;background:#a6b6c7;transition:.18s}.toggle.on{background:#147c83}.toggle.on:after{transform:translateX(16px);background:white}
+.control{margin-top:9px}.control label{display:flex;justify-content:space-between;color:#bdcddd;font-size:10px;margin-bottom:4px}.control output{color:var(--cyan);font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:var(--cyan);height:4px}.module-slots{display:flex;gap:5px;flex-wrap:wrap}.slot{font-size:9px;padding:4px 7px;border-radius:6px}.slot.selected{background:#16465a;color:var(--cyan);border-color:#27849a}
+.engine-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.engine-grid .control{margin:0}.engine-grid .control label{font-size:10px}.gauge{height:8px;background:#26384b;border-radius:20px;overflow:hidden;margin:9px 0 5px}.gauge span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--orange),var(--red));border-radius:20px;transition:width .3s}.smallrow{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}.warning{display:none;color:var(--red);font-size:10px;padding:7px 9px;background:#411e2b;border:1px solid #713242;border-radius:7px;margin-top:8px}.warning.show{display:block}
+.note{font-size:10px;color:var(--muted);line-height:1.65}.formula{padding:9px;background:#0b1a2a;border-radius:8px;color:#c5d8e9;font-size:10px;margin-top:8px}.formula b{color:var(--cyan)}
+footer{color:#70879e;font-size:10px;text-align:center;padding:10px 0 22px}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){header{padding:15px}.brand h1{font-size:15px}main{padding:12px}.metrics{gap:7px}.metric{padding:10px;min-height:84px}.metric-value{font-size:22px}.left-bottom{grid-template-columns:1fr}.engine-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="mark">PM</div><div><div class="eyebrow">AEROSOL ENGINEERING / VIRTUAL LAB</div><h1>PM Capture Lab <span class="sub">— フィルターレス排気システム</span></h1></div></div><div class="header-actions"><span class="status"><i class="dot"></i> SIMULATION RUNNING</span><button id="pauseBtn">一時停止</button><button id="resetBtn">↺ リセット</button></div></header>
+<main>
+<section class="metrics">
+<div class="metric"><div class="metric-label">PM回収率 <span>CAPTURE EFFICIENCY</span></div><div class="metric-value" id="eff">0.0<span class="metric-unit">%</span></div><div class="metric-foot" id="effFoot">回収粒子 / 流入粒子（累積）</div></div>
+<div class="metric"><div class="metric-label">圧力損失 <span>BACK PRESSURE</span></div><div class="metric-value" id="pressure">0<span class="metric-unit">Pa</span></div><div class="metric-foot">モデル推定値・流路抵抗</div></div>
+<div class="metric"><div class="metric-label">排出PM量 <span>PM EMISSION</span></div><div class="metric-value" id="emission">0<span class="metric-unit">個/s</span></div><div class="metric-foot">流入数に対する未回収割合</div></div>
+<div class="metric"><div class="metric-label">回収タンク <span>COLLECTED MASS INDEX</span></div><div class="metric-value" id="tank">0<span class="metric-unit"> mg*</span></div><div class="metric-foot">粒子径³に比例する相対質量</div></div>
+</section>
+<div class="layout">
+<div>
+<section class="panel"><div class="panel-head"><h2>排気流路・粒子挙動</h2><span class="tag">2D PARTICLE VIEW</span></div>
+<div class="canvas-wrap"><canvas id="sim" width="900" height="380"></canvas></div>
+<div class="canvas-legend"><span class="key"><i class="swatch" style="background:#b8c7d6"></i>未帯電PM</span><span class="key"><i class="swatch" style="background:#ff6678"></i>＋荷電</span><span class="key"><i class="swatch" style="background:#58a9ff"></i>－荷電</span><span class="key"><i class="swatch" style="background:#52d7a2"></i>回収済み</span><span class="key">◎ 音響定在波</span></div>
+<div class="hint">粒子の色・大きさ・軌跡を観察できます。粒子が大きいほど沈降・遠心分離されやすくなります。各ユニットは下のスロットから配置を変更できます。</div></section>
+<div class="left-bottom">
+<section class="panel"><div class="panel-head"><h2>性能比較・時系列</h2><span class="tag">LIVE</span></div><div class="chartbox"><canvas id="effChart"></canvas></div><div class="note">実線：現在の構成 ／ 点線：重力沈降のみ（基準）</div></section>
+<section class="panel"><div class="panel-head"><h2>背圧の推移</h2><span class="tag">Pa</span></div><div class="chartbox"><canvas id="pressChart"></canvas></div><div class="note">DPFは捕集量の蓄積に伴い、指数的に圧力損失が増加するモデルです。</div></section>
+</div>
+<section class="panel"><div class="panel-head"><h2>モデルと仮定</h2><span class="tag">SIMPLIFIED PHYSICS</span></div>
+<div class="formula"><b>ストークス沈降：</b> vₛ = (ρₚ − ρg) g d² / 18μ　（低レイノルズ数近似）</div>
+<div class="formula"><b>凝集：</b> 音響・静電ユニットで衝突確率を増加。体積加算を仮定し d_new = (d₁³ + d₂³)^(1/3)</div>
+<div class="formula"><b>サイクロン：</b> 分離指標 ∝ d²・u²・旋回強度。しきい値を超える粒子を回収</div>
+<div class="formula"><b>圧力損失：</b> 非DPF部品は流速²に比例する小さな抵抗。DPFは堆積率に対して指数関数的に増加</div>
+<p class="note">* 教育・構想検討用の無次元化した簡略モデルです。実機の流体解析（CFD）、粒径分布、凝集カーネル、荷電・放電、温度依存粘度、DPF透過率・再生、排ガス組成などを完全には表現していません。表示されるPa・mgはモデル係数で換算した参考値であり、実測値や設計保証値ではありません。</p></section>
+</div>
+<aside>
+<section class="panel"><div class="panel-head"><h2>システムプリセット</h2><span class="tag">QUICK TEST</span></div><div class="presets"><button data-preset="gravity">① 重力のみ</button><button data-preset="dpf">② 従来型 DPF</button><button data-preset="hybrid" class="primary">③ 提案ハイブリッド</button></div><div class="hint">プリセットを選択すると部品構成を一括変更し、粒子・計測値をリセットします。</div></section>
+<section class="panel"><div class="panel-head"><h2>部品モジュール</h2><span class="tag">MODULE CONFIG</span></div>
+<div id="modules">
+<div class="module" data-module="acoustic"><div class="module-top"><div class="module-name">〰 音響凝集ユニット</div><button class="toggle" aria-label="音響凝集ON/OFF"></button></div><div class="module-desc">定在波による振動・衝突促進</div><div class="control"><label>周波数 <output id="freqVal">2,000 Hz</output></label><input id="freq" type="range" min="500" max="8000" step="100" value="2000"></div><div class="control"><label>音圧レベル <output id="soundVal">145 dB</output></label><input id="sound" type="range" min="110" max="170" value="145"></div><div class="control"><label>配置スロット</label><div class="module-slots"><button class="slot selected" data-slot="1">SLOT 1</button><button class="slot" data-slot="2">SLOT 2</button><button class="slot" data-slot="3">SLOT 3</button></div></div></div>
+<div class="module" data-module="esp"><div class="module-top"><div class="module-name">⚡ 静電凝集ユニット（ESP）</div><button class="toggle" aria-label="静電凝集ON/OFF"></button></div><div class="module-desc">粒子荷電・クーロン引力による凝集</div><div class="control"><label>印加電圧 <output id="voltageVal">20 kV</output></label><input id="voltage" type="range" min="5" max="60" value="20"></div><div class="control"><label>配置スロット</label><div class="module-slots"><button class="slot" data-slot="1">SLOT 1</button><button class="slot selected" data-slot="2">SLOT 2</button><button class="slot" data-slot="3">SLOT 3</button></div></div></div>
+<div class="module" data-module="thermo"><div class="module-top"><div class="module-name">▤ 熱泳動プレート</div><button class="toggle" aria-label="熱泳動ON/OFF"></button></div><div class="module-desc">温度勾配による低温壁方向への移動</div><div class="control"><label>温度差 ΔT <output id="deltaVal">80 °C</output></label><input id="delta" type="range" min="10" max="250" value="80"></div><div class="control"><label>配置スロット</label><div class="module-slots"><button class="slot" data-slot="1">SLOT 1</button><button class="slot selected" data-slot="2">SLOT 2</button><button class="slot" data-slot="3">SLOT 3</button></div></div></div>
+<div class="module" data-module="cyclone"><div class="module-top"><div class="module-name">◉ サイクロン分離ユニット</div><button class="toggle" aria-label="サイクロンON/OFF"></button></div><div class="module-desc">旋回流・遠心力による粒径選択分離</div><div class="control"><label>旋回強度 <output id="swirlVal">70 %</output></label><input id="swirl" type="range" min="10" max="100" value="70"></div><div class="control"><label>配置スロット</label><div class="module-slots"><button class="slot" data-slot="1">SLOT 1</button><button class="slot" data-slot="2">SLOT 2</button><button class="slot selected" data-slot="3">SLOT 3</button></div></div></div>
+<div class="module" data-module="dpf"><div class="module-top"><div class="module-name">▥ 従来型セラミックフィルター（DPF）</div><button class="toggle" aria-label="DPF ON/OFF"></button></div><div class="module-desc">高捕集率・堆積による目詰まりを再現</div></div>
+</div></section>
+<section class="panel"><div class="panel-head"><h2>エンジン・環境条件</h2><span class="tag">OPERATING CONDITIONS</span></div>
+<div class="control"><label>排気流速 <output id="speedVal">12 m/s</output></label><input id="speed" type="range" min="2" max="35" value="12"></div>
+<div class="control"><label>初期PM濃度 <output id="concentrationVal">50 mg/m³</output></label><input id="concentration" type="range" min="5" max="150" value="50"></div>
+<div class="control"><label>排気ガス温度 <output id="tempVal">250 °C</output></label><input id="temp" type="range" min="40" max="600" value="250"></div>
+<div class="hint">低速域から高速走行域までの相対条件を設定します。</div></section>
+<section class="panel"><div class="panel-head"><h2>背圧モニター</h2><span class="tag">SYSTEM HEALTH</span></div><div class="smallrow"><span>圧力損失レベル</span><b id="pressureLevel">NORMAL</b></div><div class="gauge"><span id="gaugeFill"></span></div><div class="smallrow"><span>0 Pa</span><span>危険域 8,000 Pa</span></div><div class="warning" id="warning">⚠ DPF目詰まりによる高背圧を検知。流路抵抗が増大しています。</div><div class="smallrow" style="margin-top:12px"><span>DPF堆積率</span><b id="clog">0 %</b></div></section>
+</aside>
+</div>
+</main>
+<footer>PM Capture Lab · 教育・研究構想検討用シミュレーター · 数値は簡略物理モデルによる参考値です</footer>
+<script>
+(()=>{
+const $=id=>document.getElementById(id), canvas=$('sim'),ctx=canvas.getContext('2d'),W=900,H=380;
+const cfg={speed:12,concentration:50,temp:250,freq:2000,sound:145,voltage:20,delta:80,swirl:70,modules:{acoustic:false,esp:false,thermo:false,cyclone:false,dpf:false},slots:{acoustic:1,esp:2,thermo:2,cyclone:3}};
+let particles=[],stats={in:0,caught:0,escaped:0,mass:0,clog:0,frame:0},running=true,last=0,spawn=0,tick=0;
+let history={eff:[],base:[],pressure:[],baseP:[]};
+const rand=(a,b)=>a+Math.random()*(b-a),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function reset(){particles=[];stats={in:0,caught:0,escaped:0,mass:0,clog:0,frame:0};history={eff:[],base:[],pressure:[],baseP:[]};for(let i=0;i<115;i++)spawnParticle(true);updateMetrics()}
+function spawnParticle(initial=false){const d=rand(.018,.055);particles.push({x:initial?rand(90,760):55,y:rand(105,275),d,charge:0,age:0,phase:rand(0,6.28),trail:[],vx:1,vy:0});if(!initial)stats.in++}
+function preset(p){Object.keys(cfg.modules).forEach(k=>cfg.modules[k]=false);if(p==='dpf')cfg.modules.dpf=true;if(p==='hybrid'){cfg.modules.acoustic=true;cfg.modules.esp=true;cfg.modules.cyclone=true}syncModules();reset()}
+function syncModules(){document.querySelectorAll('.module').forEach(el=>el.querySelector('.toggle').classList.toggle('on',!!cfg.modules[el.dataset.module]));}
+document.querySelectorAll('.toggle').forEach(b=>b.addEventListener('click',()=>{const k=b.closest('.module').dataset.module;cfg.modules[k]=!cfg.modules[k];b.classList.toggle('on',cfg.modules[k]);reset();}));
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>preset(b.dataset.preset)));
+document.querySelectorAll('.slot').forEach(b=>b.addEventListener('click',()=>{const m=b.closest('.module').dataset.module;if(!cfg.slots[m])return;cfg.slots[m]=+b.dataset.slot;b.parentElement.querySelectorAll('.slot').forEach(x=>x.classList.toggle('selected',x===b));reset()}));
+const ranges={speed:'speedVal',concentration:'concentrationVal',temp:'tempVal',freq:'freqVal',sound:'soundVal',voltage:'voltageVal',delta:'deltaVal',swirl:'swirlVal'};
+const suffix={speed:' m/s',concentration:' mg/m³',temp:' °C',freq:' Hz',sound:' dB',voltage:' kV',delta:' °C',swirl:' %'};
+Object.entries(ranges).forEach(([id,out])=>$(id).addEventListener('input',e=>{cfg[id]=+e.target.value;$(out).textContent=Number(cfg[id]).toLocaleString('ja-JP')+suffix[id]}));
+$('pauseBtn').onclick=()=>{running=!running;$('pauseBtn').textContent=running?'一時停止':'再開'};
+$('resetBtn').onclick=reset;
+function moduleX(k){return [0,1,2,3].includes(cfg.slots[k])?([1,2,3][(cfg.slots[k]||1)-1]*205+100):300}
+function geometry(){ctx.fillStyle='#081522';ctx.fillRect(0,0,W,H);
+ctx.fillStyle='#172d40';ctx.fillRect(55,92,790,205);ctx.fillStyle='#0b1a29';ctx.fillRect(60,98,780,193);
+ctx.fillStyle='#35516a';ctx.fillRect(55,88,790,7);ctx.fillRect(55,294,790,7);
+ctx.fillStyle='#91a9bd';ctx.font='12px sans-serif';ctx.fillText('排気ガス流入口',18,76);ctx.fillText('排気口',844,76);
+ctx.strokeStyle='#4b718b';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(8,190);ctx.lineTo(55,190);ctx.moveTo(845,190);ctx.lineTo(890,190);ctx.stroke();
+ctx.fillStyle='#1b354b';ctx.fillRect(365,309,170,45);ctx.strokeStyle='#4b718b';ctx.strokeRect(365,309,170,45);ctx.fillStyle='#9bb1c5';ctx.font='11px sans-serif';ctx.fillText('着脱式 回収タンク',390,337);
+ctx.fillStyle='#36556e';ctx.fillRect(379,301,142,7);
+const labels=[['acoustic','音響'],['esp','ESP'],['thermo','熱泳動'],['cyclone','旋回'],['dpf','DPF']];
+labels.forEach(([k,name])=>{if(!cfg.modules[k])return;let x=k==='dpf'?moduleX('dpf'):moduleX(k);if(k==='dpf')x=moduleX('dpf')||690;
+ctx.save();ctx.globalAlpha=.9;
+if(k==='acoustic'){ctx.strokeStyle='#4ed9e8';ctx.lineWidth=2;for(let r=15;r<55;r+=15){ctx.beginPath();ctx.arc(x,195,r+Math.sin(tick*.05+r)*2,-1.1,1.1);ctx.stroke()}ctx.fillStyle='#4ed9e8';ctx.fillText(name,x-12,115)}
+if(k==='esp'){ctx.strokeStyle='#e1b85e';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x-28,125);ctx.lineTo(x-28,270);ctx.moveTo(x+28,125);ctx.lineTo(x+28,270);ctx.stroke();ctx.fillStyle='#e1b85e';ctx.fillText(name,x-12,115)}
+if(k==='thermo'){ctx.fillStyle='rgba(255,120,75,.13)';ctx.fillRect(x-35,98,70,193);ctx.strokeStyle='#ff9a65';ctx.setLineDash([4,4]);ctx.strokeRect(x-35,98,70,193);ctx.setLineDash([]);ctx.fillStyle='#ffb08a';ctx.fillText('ΔT',x-9,115)}
+if(k==='cyclone'){ctx.strokeStyle='#59d6a0';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(x,194,38,82,0,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(x-22,140);ctx.bezierCurveTo(x+48,150,x+45,235,x-12,247);ctx.stroke();ctx.fillStyle='#59d6a0';ctx.fillText(name,x-12,115)}
+if(k==='dpf'){ctx.fillStyle='#b7a4ff';ctx.fillRect(x-9,100,18,188);ctx.strokeStyle='#d4caff';for(let y=105;y<288;y+=8){ctx.beginPath();ctx.moveTo(x-9,y);ctx.lineTo(x+9,y);ctx.stroke()}ctx.fillStyle='#d4caff';ctx.fillText('DPF',x-11,115)}
+ctx.restore()});
+ctx.fillStyle='#718aa1';ctx.font='10px sans-serif';ctx.fillText('FLOW →',420,80);
+}
+function catchParticle(p){stats.caught++;stats.mass+=p.d**3*2.5e7}
+function step(dt){tick++;const flow=cfg.speed/12;spawn+=dt*(cfg.concentration/50)*3.2;while(spawn>1&&particles.length<450){spawnParticle();spawn--}
+const modules=cfg.modules;
+for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.age+=dt;let x=p.x,y=p.y,d=p.d;
+p.vx=1.05+flow*.75;p.vy=0;
+const acX=moduleX('acoustic'),espX=moduleX('esp'),thX=moduleX('thermo'),cyX=moduleX('cyclone');
+if(modules.acoustic&&Math.abs(x-acX)<60){p.vy+=Math.sin(tick*.12+ p.phase)*(cfg.sound-100)*.0009; if(Math.random()<.009*(cfg.sound/145)){p.d=Math.min(.19,p.d*1.22)}}
+if(modules.esp&&Math.abs(x-espX)<55){p.charge=p.charge|| (Math.random()<.5?-1:1);p.vy+=(p.charge>0?1:-1)*.12*(cfg.voltage/20);if(Math.random()<.007*(cfg.voltage/20))p.d=Math.min(.2,p.d*1.17)}
+if(modules.thermo&&Math.abs(x-thX)<48){p.vy+=.16*(cfg.delta/80)}
+if(modules.cyclone&&Math.abs(x-cyX)<55){const rel=(y-194)/100;p.vy+=rel*.24*(cfg.swirl/70)*flow;if(d>.065&&Math.random()<.018*(cfg.swirl/70)*flow){catchParticle(p);particles.splice(i,1);continue}}
+if(modules.dpf&&x>moduleX('dpf')-14&&x<moduleX('dpf')+14){if(Math.random()<.88){stats.clog=Math.min(1,stats.clog+.00013);catchParticle(p);particles.splice(i,1);continue}}
+const grav= Math.pow(d/.05,2)*.075/(1+cfg.speed/20);p.vy+=grav;
+p.x+=p.vx*dt*60;p.y+=p.vy*dt*60;
+if(p.y>286||p.y<103){if(p.y>286&&d>.025){catchParticle(p);particles.splice(i,1);continue}else{p.y=clamp(p.y,104,285);p.vy*=-.25}}
+if(p.x>845){stats.escaped++;particles.splice(i,1);continue}
+if(modules.dpf&&x>moduleX('dpf')-50&&x<moduleX('dpf')+50){} 
+p.trail.push([p.x,p.y]);if(p.trail.length>5)p.trail.shift();
+}
+}
+function pressure(){const flow=cfg.speed/12;let p=105*flow*flow;if(cfg.modules.acoustic)p+=35*flow;if(cfg.modules.esp)p+=48*flow;if(cfg.modules.thermo)p+=25*flow;if(cfg.modules.cyclone)p+=85*flow*(cfg.swirl/70);if(cfg.modules.dpf)p+=180+4200*(Math.exp(stats.clog*3.5)-1)/(Math.exp(3.5)-1);return Math.round(p)}
+function baseline(){return 105*Math.pow(cfg.speed/12,2)}
+function updateMetrics(){const eff=stats.in+115?stats.caught/(stats.in+115)*100:0,pr=pressure(),em=cfg.concentration*(1-eff/100)*.018;
+$('eff').innerHTML=eff.toFixed(1)+'<span class="metric-unit">%</span>';$('pressure').innerHTML=pr.toLocaleString()+'<span class="metric-unit">Pa</span>';$('emission').innerHTML=em.toFixed(2)+'<span class="metric-unit">mg/s*</span>';$('tank').innerHTML=stats.mass.toFixed(2)+'<span class="metric-unit"> mg*</span>';
+$('clog').textContent=Math.round(stats.clog*100)+' %';$('gaugeFill').style.width=clamp(pr/8000*100,0,100)+'%';const danger=pr>5000;$('warning').classList.toggle('show',danger);$('pressureLevel').textContent=pr>8000?'DANGER':pr>5000?'WARNING':'NORMAL';$('pressureLevel').style.color=pr>5000?'#ff6e78':'#59d6a0';}
+function drawParticles(){particles.forEach(p=>{const r=clamp(p.d*72,1.5,8);if(p.trail.length>1){ctx.strokeStyle='rgba(150,185,210,.18)';ctx.lineWidth=1;ctx.beginPath();p.trail.forEach((v,i)=>i?ctx.lineTo(v[0],v[1]):ctx.moveTo(v[0],v[1]));ctx.stroke()}
+ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.fillStyle=p.charge>0?'#ff6678':p.charge<0?'#58a9ff':'#b8c7d6';ctx.globalAlpha=.9;ctx.fill();ctx.globalAlpha=1;});}
+function drawChart(id,series,maxY){const c=$(id),g=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight,dpr=window.devicePixelRatio||1;if(c.width!==Math.round(w*dpr)||c.height!==Math.round(h*dpr)){c.width=w*dpr;c.height=h*dpr}g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,w,h);g.strokeStyle='#263b50';g.lineWidth=1;for(let j=0;j<4;j++){let y=10+j*(h-28)/3;g.beginPath();g.moveTo(28,y);g.lineTo(w-6,y);g.stroke()}g.font='9px sans-serif';g.fillStyle='#7890a6';g.fillText(maxY.toFixed(0),2,13);g.fillText('0',14,h-14);
+series.forEach((s,idx)=>{g.strokeStyle=s.color;g.lineWidth=idx?1.5:2;g.setLineDash(idx?[4,4]:[]);g.beginPath();s.data.forEach((v,i)=>{const x=28+i/Math.max(1,59)*(w-38),y=h-18-clamp(v/maxY,0,1)*(h-34);i?g.lineTo(x,y):g.moveTo(x,y)});g.stroke();});g.setLineDash([])}
+function render(){geometry();drawParticles();drawChart('effChart',[{data:history.eff,color:'#43d9e8'},{data:history.base,color:'#8da4bb'}],100);drawChart('pressChart',[{data:history.pressure,color:'#ffb45b'},{data:history.baseP,color:'#8da4bb'}],Math.max(1000,...history.pressure)*1.15)}
+function frame(ts){const dt=Math.min(.04,(ts-last)/1000||.016);last=ts;if(running){step(dt);if(++stats.frame%12===0){updateMetrics();history.eff.push(stats.caught/(stats.in+115)*100);history.base.push(clamp((1-Math.exp(-.0005*stats.frame))*4,0,4));history.pressure.push(pressure());history.baseP.push(baseline());['eff','base','pressure','baseP'].forEach(k=>{if(history[k].length>60)history[k].shift()})}}render();requestAnimationFrame(frame)}
+Object.entries(ranges).forEach(([id,out])=>$(out).textContent=Number(cfg[id]).toLocaleString('ja-JP')+suffix[id]);
+syncModules();reset();preset('hybrid');requestAnimationFrame(frame);
+})();
+</script>
+</body></html>
