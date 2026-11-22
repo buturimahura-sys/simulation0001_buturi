@@ -40,7 +40,7 @@
 <section class="panel"><h2 id="formTitle">CUE SETUP</h2><form id="cueForm">
 <div class="form-grid"><div class="field"><label for="cueNo">キュー番号</label><input id="cueNo" required maxlength="12" placeholder="Q-001"></div><div class="field"><label for="cueType">分類</label><select id="cueType"><option>SE</option><option>BGM</option><option>JINGLE</option><option>VOICE</option><option>OTHER</option></select></div></div>
 <div class="field"><label for="cueName">キュー名</label><input id="cueName" required maxlength="80" placeholder="例：森の環境音"></div>
-<div class="field"><label for="audioFile">音源ファイル（MP3 / WAV / M4A等）</label><input id="audioFile" type="file" accept="audio/*"><div class="notice" id="audioInfo">音源未登録</div></div>
+<div class="field"><label for="audioFile">音源ファイル（MP3 / WAV / M4A等）</label><input id="audioFile" type="file" accept=".mp3,audio/mpeg,audio/*"><div class="notice" id="audioInfo">音源未登録</div></div>
 <div class="form-grid"><div class="field"><label for="cueVolume">キュー音量</label><input id="cueVolume" type="range" min="0" max="100" value="100"></div><div class="field"><label for="playMode">再生方式</label><select id="playMode"><option value="once">ワンショット</option><option value="loop">ループ</option></select></div></div>
 <div class="form-grid"><div class="field"><label for="fadeIn">フェードイン（秒）</label><input id="fadeIn" type="number" min="0" max="30" step=".5" value="0"></div><div class="field"><label for="fadeOut">フェードアウト（秒）</label><input id="fadeOut" type="number" min="0" max="30" step=".5" value="0"></div></div>
 <div class="field"><label for="cueNote">演出メモ</label><textarea id="cueNote" placeholder="出すタイミング・注意事項など"></textarea></div>
