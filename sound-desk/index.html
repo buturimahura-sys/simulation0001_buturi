@@ -103,6 +103,6 @@ async function importProject(file){if(!file)return;try{const data=JSON.parse(awa
 $('importFile').onchange=e=>{importProject(e.target.files[0]);e.target.value=''};$('importFile2').onchange=e=>{importProject(e.target.files[0]);e.target.value=''};
 $('demoBtn').onclick=()=>{if(cues.length&&!confirm('サンプルキューを追加しますか？'))return;['開演ベル','場面転換','暗転'].forEach((name,i)=>cues.push({id:uid(),no:'DEMO-'+(i+1),type:'SE',name,audio:null,audioName:'',volume:100,mode:'once',fadeIn:0,fadeOut:0,note:'サンプルです。音源を登録してください。',images:[]}));selectedId=cues[cues.length-3].id;render();loadForm()};
 document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))return;if(e.code==='Space'){e.preventDefault();$('playBtn').click()}if(e.key==='Escape')stopAudio();if(e.key==='ArrowRight')playNext();if(e.key==='ArrowLeft')playPrev()});
-(async()=>{try{await openDB();const saved=await dbGet();if(Array.isArray(saved))cues=saved;selectedId=cues[0]?.id||null;render();loadForm();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});}catch(e){toast('LOCAL STORAGE UNAVAILABLE')}})();
+(async()=>{try{await openDB();const saved=await dbGet();if(Array.isArray(saved))cues=saved;selectedId=cues[0]?.id||null;render();loadForm();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js?v=2',{updateViaCache:'none'}).catch(()=>{});}catch(e){toast('LOCAL STORAGE UNAVAILABLE')}})();
 </script>
 </body></html>
