@@ -1,0 +1,12 @@
+{
+  "name": "SOUND DESK - Broadcast Cue Control",
+  "short_name": "SOUND DESK",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0b111a",
+  "theme_color": "#101722",
+  "description": "iPad向け静的ポン出し・キュー操作ツール"
+}
